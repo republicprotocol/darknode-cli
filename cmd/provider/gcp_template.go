@@ -63,7 +63,7 @@ resource "google_compute_network" "darknode_network" {
 }
 
 resource "google_compute_firewall" "darknode_firewall" {
-  network     = "${google_compute_network.darknode_network.name}"
+  network     = google_compute_network.darknode_network.name
   name        = "{{.Name}}"
   
   allow {
@@ -98,7 +98,7 @@ resource "google_compute_instance" "darknode" {
   }
 
   network_interface {
-    network = "${google_compute_network.darknode_network.name}"
+    network = google_compute_network.darknode_network.name
     access_config {}
   }
 
@@ -128,7 +128,6 @@ resource "google_compute_instance" "darknode" {
       "sudo ufw allow 18514/tcp", 
       "sudo ufw allow 18515/tcp", 
       "sudo ufw --force enable",
-      "until sudo apt-get -y install jq; do sleep 4; done",
 	]
 
     connection {

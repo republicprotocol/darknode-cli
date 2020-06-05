@@ -126,7 +126,6 @@ resource "aws_instance" "darknode" {
       "sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade",
       "sudo DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade",
       "sudo DEBIAN_FRONTEND=noninteractive apt-get -y autoremove",
-      "sudo apt-get -y install jq",
       "sudo apt-get install ufw",
       "sudo ufw limit 22/tcp",
       "sudo ufw allow 18514/tcp", 
@@ -190,9 +189,3 @@ output "provider" {
 output "ip" {
   value = aws_instance.darknode.public_ip
 }`
-
-// {{if .AllocationID}}
-// resource "aws_eip_association" "eip_assoc" {
-// instance_id   = "${aws_instance.darknode.id}"
-// allocation_id = "${var.allocation_id}"
-// }{{else}}{{end}}
