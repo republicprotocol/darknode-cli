@@ -1,6 +1,6 @@
 ## 3.0.11
 - Validate GCP node name 
-- Validate the availability of the provided region and instance type. 
+- Dynamically validate the availability of the provided region and instance type. 
 - Fix issue when providing a relative path for the credential file. 
 - Remove deprecated syntax from the terraform config file.
 - No longer install jq in the deployment process.

@@ -51,8 +51,17 @@ func (p providerGcp) Name() string {
 }
 
 func (p providerGcp) Deploy(ctx *cli.Context) error {
-	name := ctx.String("name")
-	tags := ctx.String("tags")
+	name := strings.TrimSpace(ctx.String("name"))
+	tags := strings.TrimSpace(ctx.String("tags"))
+
+	reg := "^[a-z]([-a-z0-9]{0,61}[a-z0-9])?$"
+	match, err := regexp.MatchString(reg, name)
+	if err != nil {
+		return err
+	}
+	if !match{
+		return errors.New("for google cloud, name must start with a lowercase letter followed by up to 62 lowercase letters, numbers, or hyphens, and cannot end with a hyphen")
+	}
 
 	latestVersion, err := util.LatestStableRelease()
 	if err != nil {
