@@ -1,4 +1,4 @@
-## 3.0.11
+## 3.0.12
 - Validate GCP node name 
 - Dynamically validate the availability of the provided region and instance type. 
 - Fix issue when providing a relative path for the credential file. 
