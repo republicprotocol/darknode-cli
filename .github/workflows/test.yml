@@ -8,8 +8,8 @@ jobs:
               uses: actions/checkout@v2
             - name: Build with xgo
               uses: crazy-max/ghaction-xgo@v1
-              working-directory: ./cmd
               with:
+                  pkg: cmd
                   xgo_version: latest
                   dest: build
                   targets: linux/arm64,linux/amd64,darwin/amd64
