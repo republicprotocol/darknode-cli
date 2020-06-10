@@ -6,16 +6,16 @@ jobs:
         steps:
             - name: Check out code
               uses: actions/checkout@v2
-            - name: Pull the latest docker image
-              uses: docker://techknowlogick/xgo:latest
-            - name: Build the binaries
-              run: |
-                  make
-                  mv $(make target_name) ./artifacts/darknode_linux_amd64
-                  env GOOS=linux CGO_ENABLED=1 CC=aarch64-linux-gnu-gcc-6 CXX=aarch64-linux-gnu-g++-6 GOARCH=arm64 make
-                  mv $(make target_name) ./artifacts/darknode_linux_arm
-                  env GOOS=darwin CGO_ENABLED=1 CC=o64-clang CXX=o64-clang++ GOARCH=amd64 make
-                  mv $(make target_name) ./artifacts/darknode_darwin_amd64
+            - name: Build with xgo
+              uses: crazy-max/ghaction-xgo@v1
+              with:
+                  xgo_version: latest
+                  dest: build
+                  targets: linux/arm64,linux/amd64,darwin/amd64
+                  v: true
+                  x: false
+                  buildmode: default
+                  ldflags: -s -w
             - name: Create Release
               id: create_release
               uses: actions/create-release@v1
