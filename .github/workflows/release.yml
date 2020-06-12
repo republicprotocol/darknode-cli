@@ -10,9 +10,11 @@ jobs:
         steps:
             - name: Check out code
               uses: actions/checkout@v2
-            - name: Parse the new version number
+            - name: Parse the new version number check against current release
               run: |
                   echo ::set-env name=VER::$(cat ./VERSION | tr -d "[:space:]")
+                  chmod +x ./test/version.sh
+                  ./test/version.sh
             - name: Build the binary
               run: |
                   make
@@ -76,3 +78,8 @@ jobs:
                   asset_path: ./artifacts/update.sh
                   asset_name: update.sh
                   asset_content_type: text/x-sh; charset=utf-8
+            - name: Verify the installation process
+              run: |
+                  curl https://www.github.com/renproject/darknode-cli/releases/latest/download/install.sh -sSfL | sh
+                  export PATH=$PATH:$HOME/.darknode/bin
+                  darknode --version

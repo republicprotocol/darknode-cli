@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/google/go-github/github"
 	"github.com/hashicorp/go-version"
 	"github.com/renproject/darknode-cli/cmd/provider"
 	"github.com/renproject/darknode-cli/util"
@@ -181,6 +180,7 @@ func main() {
 		// Remove the timestamp for error message
 		log.SetFlags(log.Flags() &^ (log.Ldate | log.Ltime))
 		color.Red(err.Error())
+		os.Exit(1)
 	}
 }
 
@@ -190,7 +190,8 @@ func checkUpdates(curVer string) {
 	// Get latest release
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client := github.NewClient(nil)
+
+	client := util.GithubClient(ctx)
 	release, _, err := client.Repositories.GetLatestRelease(ctx, "renproject", "darknode-cli")
 	if err != nil {
 		return

@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/google/go-github/v31/github"
 	"github.com/hashicorp/go-version"
 	"github.com/renproject/darknode-cli/util"
 	"github.com/renproject/phi"
@@ -99,7 +98,7 @@ func validateVersion(version string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	client := github.NewClient(nil)
+	client := util.GithubClient(ctx)
 	_, response, err := client.Repositories.GetReleaseByTag(ctx, "renproject", "darknode-release", version)
 	if err != nil {
 		return err
