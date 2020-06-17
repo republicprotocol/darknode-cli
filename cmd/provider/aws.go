@@ -1,35 +1,19 @@
 package provider
 
 import (
-	"fmt"
+	"errors"
+	"log"
 	"math/rand"
 	"strings"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/renproject/darknode-cli/darknode"
 	"github.com/renproject/darknode-cli/util"
 	"github.com/urfave/cli"
 )
-
-// All available regions on AWS.
-var AllAwsRegions = []string{
-	"ap-northeast-1",
-	"ap-northeast-2",
-	"ap-south-1",
-	"ap-southeast-1",
-	"ap-southeast-2",
-	"ca-central-1",
-	"eu-central-1",
-	"eu-north-1",
-	"eu-west-1",
-	"eu-west-2",
-	"eu-west-3",
-	"sa-east-1",
-	"us-east-1",
-	"us-east-2",
-	"us-west-1",
-	"us-west-2",
-}
 
 type providerAws struct {
 	accessKey string
@@ -97,20 +81,63 @@ func (p providerAws) Deploy(ctx *cli.Context) error {
 }
 
 func (p providerAws) validateRegionAndInstance(ctx *cli.Context) (string, string, error) {
-	// TODO : use aws api to validate the region and instance type
 	region := strings.ToLower(strings.TrimSpace(ctx.String("aws-region")))
 	instance := strings.ToLower(strings.TrimSpace(ctx.String("aws-instance")))
 
-	if region == "" {
-		region = AllAwsRegions[rand.Intn(len(AllAwsRegions))]
+	// Fetch valid regions for the user.
+	cred := credentials.NewStaticCredentials(p.accessKey,p.secretKey,"")
+	sess, err := session.NewSession(&aws.Config{
+		Region:      aws.String("us-east-1"),
+		Credentials: cred,
+	})
+	if err != nil {
+		return "", "", err
 	}
-	if !util.StringInSlice(region, AllAwsRegions) {
-		return "", "", fmt.Errorf("aws region [%v] is not supported yet", region)
+	service := ec2.New(sess)
+	input := &ec2.DescribeRegionsInput{}
+	result, err := service.DescribeRegions(input)
+	if err != nil {
+		return "", "", err
 	}
 
-	if instance == "" {
-		return "", "", fmt.Errorf("instance type [%v] is not supported yet", instance)
+	// Validate the given region or randomly pick one for the user
+	if region == ""{
+		randReg := result.Regions[rand.Intn(len(result.Regions))]
+		region = *randReg.RegionName
+	} else {
+		valid := false
+		for _, reg := range result.Regions {
+			if *reg.RegionName == region {
+				valid = true
+				break
+			}
+		}
+		if !valid {
+			return "","", errors.New("invalid region")
+		}
 	}
 
-	return region, instance, nil
+	return region, instance, validateInstanceType(cred, region, instance)
+}
+
+func validateInstanceType(cred *credentials.Credentials, region, instance string) error {
+	insSession, err := session.NewSession(&aws.Config{
+		Region:      aws.String(region),
+		Credentials: cred,
+	})
+	if err != nil {
+		return err
+	}
+	service := ec2.New(insSession)
+	input := &ec2.DescribeInstanceTypesInput{
+		InstanceTypes: []*string{aws.String(instance)},
+	}
+	result, err := service.DescribeInstanceTypes(input)
+	if err != nil {
+		return err
+	}
+	for _,res := range result.InstanceTypes {
+		log.Print(*res.InstanceType)
+	}
+	return nil
 }

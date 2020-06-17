@@ -3,7 +3,7 @@ module github.com/renproject/darknode-cli
 go 1.13
 
 require (
-	github.com/aws/aws-sdk-go v1.25.19
+	github.com/aws/aws-sdk-go v1.32.3
 	github.com/btcsuite/btcd v0.20.1-beta
 	github.com/ethereum/go-ethereum v1.9.6
 	github.com/fatih/color v1.7.0
