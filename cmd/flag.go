@@ -32,17 +32,25 @@ var (
 		Name:  "file",
 		Usage: "Path of the script file you want the Darknode to run",
 	}
-	ForceFlag = cli.BoolFlag{
-		Name:  "force, f",
-		Usage: "Force destruction without interactive prompts",
-	}
 	VersionFlag = cli.StringFlag{
 		Name:  "version",
 		Usage: "Version of darknode you want to upgrade to",
 	}
+	InstanceFlag = cli.StringFlag{
+		Name:        "instance",
+		Usage:       "Instance type you want to resize to",
+	}
 	DowngradeFlag = cli.BoolFlag{
 		Name:  "downgrade",
 		Usage: "Force downgrading to an older version without interactive prompts",
+	}
+	ForceFlag = cli.BoolFlag{
+		Name:  "force, f",
+		Usage: "Force destruction without interactive prompts",
+	}
+	StorageFlag = cli.IntFlag{
+		Name:        "storage",
+		Usage:       "Size of the storage you want to upgrade to",
 	}
 )
 

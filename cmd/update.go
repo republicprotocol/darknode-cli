@@ -91,7 +91,7 @@ rm -rf ~/.darknode/db &&
 mv ~/.darknode/db_bak ~/.darknode/db &&
 echo %v > ~/.darknode/version &&
 systemctl --user restart darknode`, url, ver)
-	return util.RemoteRun(name, script)
+	return util.RemoteRun(name, script, "darknode")
 }
 
 func validateVersion(version string) error {

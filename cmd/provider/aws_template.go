@@ -115,6 +115,11 @@ resource "aws_instance" "darknode" {
     Name = "{{.Name}}"
   }
 
+  root_block_device {
+    volume_type = "gp2"
+    volume_size = 15
+  }
+
   provisioner "remote-exec" {
 
 	inline = [
