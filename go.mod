@@ -18,7 +18,7 @@ require (
 	github.com/renproject/phi v0.1.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/syndtr/goleveldb v1.0.1-0.20190923125748-758128399b1d // indirect
-	github.com/urfave/cli v1.22.1
+	github.com/urfave/cli/v2 v2.2.0 // indirect
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	google.golang.org/api v0.26.0
