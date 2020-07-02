@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/go-version"
 	"github.com/renproject/darknode-cli/cmd/provider"
 	"github.com/renproject/darknode-cli/util"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // This will be populated on build
@@ -25,15 +25,16 @@ func init() {
 func main() {
 	// Create new cli application
 	app := cli.NewApp()
-	app.Name = "Darknode CLI"
-	app.Usage = "A command-line tool for managing Darknodes."
+	app.Name = "Nodectl"
+	app.Usage = "A command-line tool for managing Ren nodes."
 	app.Version = binaryVersion
+	app.EnableBashCompletion = true
 
 	// Fetch latest release and check if our version is behind.
 	checkUpdates(app.Version)
 
 	// Define sub-commands
-	app.Commands = []cli.Command{
+	app.Commands = []*cli.Command{
 		{
 			Name:  "up",
 			Usage: "Deploy a new Darknode",
@@ -166,12 +167,10 @@ func main() {
 		},
 	}
 
-	// Show error message and display the help page for the app
+	// Show error message and display the help page when command is not found.
 	app.CommandNotFound = func(c *cli.Context, command string) {
-		if err := cli.ShowAppHelp(c); err != nil {
-			panic(err)
-		}
-		color.Red("command %q not found", command)
+		color.Red("[Warning] command '%q' not found", command)
+		color.Red("[Warning] run 'nodectl --help' for a list of available commands", command)
 	}
 
 	// Start the app
@@ -184,35 +183,28 @@ func main() {
 	}
 }
 
-// checkUpdates fetches the latest release of `darknode-cli` from github and compare the versions. It warns the user if
-// current version is older than the latest release.
+// checkUpdates fetches the latest release of `nodectl` from github and compares the versions. It warns the user if
+// current version is out of date.
 func checkUpdates(curVer string) {
 	// Get latest release
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
 	defer cancel()
 
-	client := util.GithubClient(ctx)
-	release, _, err := client.Repositories.GetLatestRelease(ctx, "renproject", "darknode-cli")
+	// Compare versions
+	versionLatest, err := util.CurrentReleaseVersion(ctx)
 	if err != nil {
 		return
 	}
-
-	// Compare versions
 	versionCurrent, err := version.NewVersion(curVer)
 	if err != nil {
 		color.Red("cannot parse current software version, err = %v", err)
-		return
-	}
-	versionLatest, err := version.NewVersion(release.GetTagName())
-	if err != nil {
-		color.Red("cannot parse latest software version, err = %v", err)
 		return
 	}
 
 	// Warn user they're using a older version.
 	if versionCurrent.LessThan(versionLatest) {
 		color.Red("You are running %v", curVer)
-		color.Red("A new release is available (%v)", release.GetTagName())
-		color.Red("You can update with `curl https://www.github.com/renproject/darknode-cli/releases/latest/download/update.sh -sSfL | sh` command")
+		color.Red("A new release is available (%v)", versionLatest.String())
+		color.Red("You can update your nodectl with `nodectl upgrade` command")
 	}
 }

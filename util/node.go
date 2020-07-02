@@ -7,18 +7,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
 
-	"github.com/google/go-github/v31/github"
 	"github.com/hashicorp/go-version"
 	"github.com/renproject/darknode-cli/darknode"
 	"github.com/renproject/darknode-cli/darknode/addr"
 	"golang.org/x/crypto/ssh"
-	"golang.org/x/oauth2"
 )
 
 var (
@@ -164,21 +161,6 @@ func ValidateTags(have, required string) bool {
 		}
 	}
 	return true
-}
-
-// Initialize the github client. If an access token has been set in a environment,
-// it will use it for oauth to avoid rate limiting.
-func GithubClient(ctx context.Context) *github.Client {
-	accessToken := os.Getenv("ACCESS_TOKEN")
-	var client *http.Client
-	if accessToken != "" {
-		ts := oauth2.StaticTokenSource(
-			&oauth2.Token{AccessToken: accessToken},
-		)
-		client = oauth2.NewClient(ctx, ts)
-	}
-
-	return github.NewClient(client)
 }
 
 // LatestStableRelease checks the darknode release repo and return the version
