@@ -138,7 +138,7 @@ func initConfig(ctx *cli.Context) error {
 	destination := filepath.Join(util.NodePath(name), "config.json")
 
 	if configFile != "" {
-		path ,err:= filepath.Abs(configFile)
+		path, err := filepath.Abs(configFile)
 		if err != nil {
 			return err
 		}
@@ -146,7 +146,7 @@ func initConfig(ctx *cli.Context) error {
 		if err != nil {
 			return err
 		}
-		return  ioutil.WriteFile(destination, input, 0600)
+		return ioutil.WriteFile(destination, input, 0600)
 	} else {
 		network, _ := darknode.NewNetwork(ctx.String("network"))
 		config, err := darknode.NewConfig(network)

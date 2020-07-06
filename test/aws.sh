@@ -2,12 +2,12 @@
 name="testing-aws-$1"
 
 # Deploy a darknode using AWS
-darknode up --aws --name $name --aws-access-key  $aws_access_key --aws-secret-key $aws_secret_key --tags mainnet,testing
+darknode up --aws --name $name --network mainnet --aws-access-key  $aws_access_key --aws-secret-key $aws_secret_key --tags mainnet,testing
 if [ "$?" -ne "0" ]; then
     echo "failed to deploy darknode"
     exit 1
 fi
-if ! darknode list; then
+if ! darknode list | grep $name; then
     echo "failed to list node"
     exit 1
 fi
@@ -15,6 +15,9 @@ if ! darknode down $name -f; then
     echo "failed to destroy node"
     exit 1
 fi
+
+# Return error when provider a empty node name
+darknode_up_empty_node_name=darknode up --name ""
 
 # Return error when not providing a provider name
 darknode up

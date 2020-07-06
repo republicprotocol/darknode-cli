@@ -43,7 +43,7 @@ func NewAWS(ctx *cli.Context) (Provider, error) {
 		cred := credentials.NewSharedCredentials("", ctx.String("aws-profile"))
 		credValue, err := cred.Get()
 		if err != nil {
-			return nil, err
+			return nil, errors.New("invalid credentials")
 		}
 		accessKey, secretKey = credValue.AccessKeyID, credValue.SecretAccessKey
 		if accessKey == "" || secretKey == "" {
