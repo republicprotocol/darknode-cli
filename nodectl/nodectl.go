@@ -1,46 +1,34 @@
-package main
+package nodectl
 
 import (
-	"context"
-	"log"
-	"math/rand"
+	"encoding/json"
+	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/fatih/color"
-	"github.com/hashicorp/go-version"
-	"github.com/renproject/darknode-cli/cmd/provider"
+	"github.com/renproject/darknode-cli/darknode"
+	"github.com/renproject/darknode-cli/provider"
 	"github.com/renproject/darknode-cli/util"
 	"github.com/urfave/cli/v2"
 )
 
-// This will be populated on build
-var binaryVersion = "undefined"
-
-func init() {
-	rand.Seed(time.Now().UTC().UnixNano())
-}
-
-func main() {
-	// Create new cli application
+// Create new cli application
+func App() *cli.App {
 	app := cli.NewApp()
 	app.Name = "Nodectl"
 	app.Usage = "A command-line tool for managing Ren nodes."
-	app.Version = binaryVersion
 	app.EnableBashCompletion = true
-
-	// Fetch latest release and check if our version is behind.
-	checkUpdates(app.Version)
 
 	// Define sub-commands
 	app.Commands = []*cli.Command{
 		{
 			Name:  "up",
-			Usage: "Deploy a new Darknode",
+			Usage: "Deploy a new Ren node",
 			Flags: []cli.Flag{
 				// General
-				NameFlag, TagsFlag, NetworkFlag,
+				NameFlag, TagsFlag, NetworkFlag, ConfigFlag,
 				// AWS
 				AwsFlag, AwsAccessKeyFlag, AwsSecretKeyFlag, AwsInstanceFlag, AwsRegionFlag, AwsProfileFlag,
 				// Digital Ocean
@@ -48,17 +36,53 @@ func main() {
 				// Google Cloud Platform
 				GcpFlag, GcpRegionFlag, GcpCredFlag, GcpMachineFlag,
 			},
-			Action: func(c *cli.Context) error {
-				p, err := provider.ParseProvider(c)
+			Action: func(ctx *cli.Context) error {
+				// Validate common params
+				name := ctx.String("name")
+				if name == "" {
+					return util.ErrEmptyName
+				}
+				if _, err := os.Stat(util.NodePath(name)); err == nil {
+					return fmt.Errorf("node [%v] already exist", name)
+				}
+				_, err := darknode.NewNetwork(ctx.String("network"))
 				if err != nil {
 					return err
 				}
-				return p.Deploy(c)
+
+				// Verify the config file if user wants to use their own config
+				configFile := ctx.String("config")
+				if configFile != "" {
+					// verify the config exist and of the right format
+					path, err := filepath.Abs(configFile)
+					if err != nil {
+						return err
+					}
+					if _, err := os.Stat(path); err != nil {
+						return errors.New("config file doesn't exist")
+					}
+					jsonFile, err := os.Open(path)
+					if err != nil {
+						return err
+					}
+					defer jsonFile.Close()
+					var config darknode.Config
+					if err := json.NewDecoder(jsonFile).Decode(&config); err != nil {
+						return fmt.Errorf("incompatible config, err = %v", err)
+					}
+				}
+
+				// Parse the provider and deploy the node
+				p, err := provider.ParseProvider(ctx)
+				if err != nil {
+					return err
+				}
+				return p.Deploy(ctx)
 			},
 		},
 		{
 			Name:    "destroy",
-			Usage:   "Destroy one of your Darknode",
+			Usage:   "Destroy one of your Ren node",
 			Aliases: []string{"down"},
 			Flags:   []cli.Flag{TagsFlag, ForceFlag},
 			Action: func(c *cli.Context) error {
@@ -67,7 +91,7 @@ func main() {
 		},
 		{
 			Name:  "update",
-			Usage: "Update your Darknodes to the latest software and configuration",
+			Usage: "Update your Ren nodes to the latest version",
 			Flags: []cli.Flag{TagsFlag, VersionFlag, DowngradeFlag},
 			Action: func(c *cli.Context) error {
 				return updateNode(c)
@@ -76,7 +100,7 @@ func main() {
 		{
 			Name:  "ssh",
 			Flags: []cli.Flag{},
-			Usage: "SSH into one of your Darknode",
+			Usage: "SSH into one of your Ren node",
 			Action: func(c *cli.Context) error {
 				name := c.Args().First()
 				if err := util.ValidateNodeName(name); err != nil {
@@ -173,38 +197,5 @@ func main() {
 		color.Red("[Warning] run 'nodectl --help' for a list of available commands", command)
 	}
 
-	// Start the app
-	err := app.Run(os.Args)
-	if err != nil {
-		// Remove the timestamp for error message
-		log.SetFlags(log.Flags() &^ (log.Ldate | log.Ltime))
-		color.Red(err.Error())
-		os.Exit(1)
-	}
-}
-
-// checkUpdates fetches the latest release of `nodectl` from github and compares the versions. It warns the user if
-// current version is out of date.
-func checkUpdates(curVer string) {
-	// Get latest release
-	ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
-	defer cancel()
-
-	// Compare versions
-	versionLatest, err := util.CurrentReleaseVersion(ctx)
-	if err != nil {
-		return
-	}
-	versionCurrent, err := version.NewVersion(curVer)
-	if err != nil {
-		color.Red("cannot parse current software version, err = %v", err)
-		return
-	}
-
-	// Warn user they're using a older version.
-	if versionCurrent.LessThan(versionLatest) {
-		color.Red("You are running %v", curVer)
-		color.Red("A new release is available (%v)", versionLatest.String())
-		color.Red("You can update your nodectl with `nodectl upgrade` command")
-	}
+	return app
 }

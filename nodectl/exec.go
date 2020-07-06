@@ -1,4 +1,4 @@
-package main
+package nodectl
 
 import (
 	"errors"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/renproject/darknode-cli/util"
 	"github.com/renproject/phi"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // execScript execute a bash script on a darknode or a set of darknodes by the tags.

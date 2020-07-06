@@ -1,4 +1,4 @@
-package main
+package nodectl
 
 import (
 	"errors"
@@ -8,9 +8,9 @@ import (
 	"regexp"
 
 	"github.com/fatih/color"
-	"github.com/renproject/darknode-cli/cmd/provider"
+	"github.com/renproject/darknode-cli/provider"
 	"github.com/renproject/darknode-cli/util"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // ErrInvalidInstanceSize is returned when the given instance size is invalid.
@@ -32,7 +32,7 @@ var (
 )
 
 type Change struct {
-	Regex   string
+	Regex       string
 	Replacement string
 }
 
@@ -75,7 +75,7 @@ func resize(ctx *cli.Context) error {
 	}
 
 	// Add instance change if user wants to change the instance type
-	if instance != ""{
+	if instance != "" {
 		var change Change
 		switch p {
 		case provider.NameAws:

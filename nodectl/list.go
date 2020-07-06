@@ -1,4 +1,4 @@
-package main
+package nodectl
 
 import (
 	"fmt"
@@ -7,10 +7,10 @@ import (
 	"sync/atomic"
 
 	"github.com/fatih/color"
-	"github.com/renproject/darknode-cli/cmd/provider"
+	"github.com/renproject/darknode-cli/provider"
 	"github.com/renproject/darknode-cli/util"
 	"github.com/renproject/phi"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // listAllNodes will list information of deployed darknodes. Results can be filtered by the tags.

@@ -1,4 +1,4 @@
-package main
+package nodectl
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/renproject/darknode-cli/util"
 	"github.com/renproject/phi"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // Commands for different actions to the darknode.

@@ -1,54 +1,6 @@
 package provider
 
-import (
-	"fmt"
-	"os"
-	"path/filepath"
-	"text/template"
-
-	"github.com/renproject/darknode-cli/util"
-)
-
-type awsTerraform struct {
-	Name          string
-	Region        string
-	InstanceType  string
-	ConfigPath    string
-	PubKeyPath    string
-	PriKeyPath    string
-	AccessKey     string
-	SecretKey     string
-	ServiceFile   string
-	LatestVersion string
-}
-
-// tfConfig generates the terraform config file for deploying to AWS.
-func (p providerAws) tfConfig(name, region, instance, latestVersion string) error {
-	tf := awsTerraform{
-		Name:          name,
-		Region:        region,
-		InstanceType:  instance,
-		ConfigPath:    fmt.Sprintf("~/.darknode/darknodes/%v/config.json", name),
-		PubKeyPath:    fmt.Sprintf("~/.darknode/darknodes/%v/ssh_keypair.pub", name),
-		PriKeyPath:    fmt.Sprintf("~/.darknode/darknodes/%v/ssh_keypair", name),
-		AccessKey:     p.accessKey,
-		SecretKey:     p.secretKey,
-		ServiceFile:   darknodeService,
-		LatestVersion: latestVersion,
-	}
-
-	t, err := template.New("aws").Parse(awsTemplate)
-	if err != nil {
-		return err
-	}
-	tfFile, err := os.Create(filepath.Join(util.NodePath(name), "main.tf"))
-	if err != nil {
-		return err
-	}
-	return t.Execute(tfFile, tf)
-}
-
-var awsTemplate = `
+var templateAWS = `
 provider "aws" {
   region     = "{{.Region}}"
   access_key = "{{.AccessKey}}"

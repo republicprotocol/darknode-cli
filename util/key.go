@@ -23,9 +23,6 @@ func GenerateSshKeyAndWriteToDir(name string) error {
 		return err
 	}
 	key.Precompute()
-	if err != nil {
-		return err
-	}
 
 	// Write the private key to file
 	priKeyBytes := x509.MarshalPKCS1PrivateKey(key)

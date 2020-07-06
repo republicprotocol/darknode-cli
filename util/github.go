@@ -2,10 +2,11 @@ package util
 
 import (
 	"context"
-	"fmt"
-	"io/ioutil"
+	"errors"
 	"net/http"
 	"os"
+	"regexp"
+	"time"
 
 	"github.com/google/go-github/v31/github"
 	"github.com/hashicorp/go-version"
@@ -28,30 +29,59 @@ func GithubClient(ctx context.Context) *github.Client {
 }
 
 // CurrentReleaseVersion queries the Github API and fetch the latest release version of nodectl.
-func CurrentReleaseVersion(ctx context.Context) (*version.Version, error){
-	// Initialize the github client
-	var hClient *http.Client
-	accessToken := os.Getenv("ACCESS_TOKEN")
-	if accessToken != "" {
-		token := &oauth2.Token{
-			AccessToken: accessToken,
-		}
-		hClient = oauth2.NewClient(ctx, oauth2.StaticTokenSource(token))
-	}
-	client := github.NewClient(hClient)
-
-	// Fetch the latest release
+func CurrentReleaseVersion(ctx context.Context) (*version.Version, error) {
+	client := GithubClient(ctx)
 	release, response, err := client.Repositories.GetLatestRelease(ctx, "renproject", "nodectl")
 	if err != nil {
 		return nil, err
 	}
 
-	if response.StatusCode != http.StatusOK{
-		message, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			return nil, err
-		}
-		return nil, fmt.Errorf("code = %v, err = %s", response.StatusCode, message)
+	// Verify the status code is 200.
+	if err := VerifyStatusCode(response.Response, http.StatusOK); err != nil {
+		return nil, err
 	}
 	return version.NewVersion(release.GetTagName())
+}
+
+// LatestStableRelease checks the node release repo and return the version of the latest release.
+func LatestStableRelease() (string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	client := GithubClient(ctx)
+	releases, response, err := client.Repositories.ListReleases(ctx, "renproject", "darknode-release", nil)
+	if err != nil {
+		return "", err
+	}
+
+	// Verify the status code is 200.
+	if err := VerifyStatusCode(response.Response, http.StatusOK); err != nil {
+		return "", err
+	}
+
+	// Find the latest stable release
+	latest, err := version.NewVersion("0.0.0")
+	if err != nil {
+		return "", err
+	}
+	stableVer, err := regexp.Compile("^v?[0-9]+\\.[0-9]+\\.[0-9]+$")
+	if err != nil {
+		return "", err
+	}
+	for _, release := range releases {
+		if stableVer.MatchString(*release.TagName) {
+			ver, err := version.NewVersion(*release.TagName)
+			if err != nil {
+				continue
+			}
+			if ver.GreaterThan(latest) {
+				latest = ver
+			}
+		}
+	}
+	if latest.String() == "0.0.0" {
+		return "", errors.New("cannot find any stable release")
+	}
+
+	return latest.String(), nil
 }

@@ -1,4 +1,4 @@
-package main
+package nodectl
 
 import (
 	"bufio"
@@ -22,7 +22,7 @@ import (
 	"github.com/renproject/mercury/sdk/client/ethclient"
 	"github.com/renproject/mercury/types/ethtypes"
 	"github.com/sirupsen/logrus"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // status represents the registration status of a Darknode.

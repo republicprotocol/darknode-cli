@@ -1,18 +1,13 @@
 package util
 
 import (
-	"context"
 	"encoding/hex"
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"path/filepath"
-	"regexp"
 	"strings"
-	"time"
 
-	"github.com/hashicorp/go-version"
 	"github.com/renproject/darknode-cli/darknode"
 	"github.com/renproject/darknode-cli/darknode/addr"
 	"golang.org/x/crypto/ssh"
@@ -161,48 +156,6 @@ func ValidateTags(have, required string) bool {
 		}
 	}
 	return true
-}
-
-// LatestStableRelease checks the darknode release repo and return the version
-// of the latest release.
-func LatestStableRelease() (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	client := GithubClient(ctx)
-	releases, response, err := client.Repositories.ListReleases(ctx, "renproject", "darknode-release", nil)
-	if err != nil {
-		return "", err
-	}
-	if response.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("cannot get latest darknode release from github, error code = %v", response.StatusCode)
-	}
-
-	latest, err := version.NewVersion("0.0.0")
-	if err != nil {
-		return "", err
-	}
-	verReg := "^v?[0-9]+\\.[0-9]+\\.[0-9]+$"
-	for _, release := range releases {
-		match, err := regexp.MatchString(verReg, *release.TagName)
-		if err != nil {
-			return "", err
-		}
-		if match {
-			ver, err := version.NewVersion(*release.TagName)
-			if err != nil {
-				return "", err
-			}
-			if ver.GreaterThan(latest) {
-				latest = ver
-			}
-		}
-	}
-	if latest.String() == "0.0.0" {
-		return "", errors.New("cannot find any stable release")
-	}
-
-	return latest.String(), nil
 }
 
 func isDeployed(name string) bool {

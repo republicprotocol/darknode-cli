@@ -1,4 +1,4 @@
-package main
+package nodectl
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/go-version"
 	"github.com/renproject/darknode-cli/util"
 	"github.com/renproject/phi"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // updateNode updates the Darknode to the latest release or the version specified

@@ -1,53 +1,6 @@
 package provider
 
-import (
-	"fmt"
-	"os"
-	"path/filepath"
-	"text/template"
-
-	"github.com/renproject/darknode-cli/util"
-)
-
-type gcpTerraform struct {
-	Name           string
-	CredentialFile string
-	Project        string
-	Zone           string
-	MachineType    string
-	ConfigPath     string
-	PubKeyPath     string
-	PriKeyPath     string
-	ServiceFile    string
-	LatestVersion  string
-}
-
-func (p providerGcp) tfConfig(name, project, zone, machine, latestVersion string) error {
-	tf := gcpTerraform{
-		Name:           name,
-		CredentialFile: p.credFile,
-		Project:        project,
-		Zone:           zone,
-		MachineType:    machine,
-		ConfigPath:     fmt.Sprintf("~/.darknode/darknodes/%v/config.json", name),
-		PubKeyPath:     fmt.Sprintf("~/.darknode/darknodes/%v/ssh_keypair.pub", name),
-		PriKeyPath:     fmt.Sprintf("~/.darknode/darknodes/%v/ssh_keypair", name),
-		ServiceFile:    darknodeService,
-		LatestVersion:  latestVersion,
-	}
-
-	t, err := template.New("gcp").Parse(gcpTemplate)
-	if err != nil {
-		return err
-	}
-	tfFile, err := os.Create(filepath.Join(util.NodePath(name), "main.tf"))
-	if err != nil {
-		return err
-	}
-	return t.Execute(tfFile, tf)
-}
-
-var gcpTemplate = `
+var templateGCP = `
 provider "google" {
   credentials = file("{{.CredentialFile}}")
   project     = "{{.Project}}"

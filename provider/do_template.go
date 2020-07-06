@@ -1,51 +1,6 @@
 package provider
 
-import (
-	"fmt"
-	"os"
-	"path/filepath"
-	"text/template"
-
-	"github.com/renproject/darknode-cli/util"
-)
-
-type doTerraform struct {
-	Name          string
-	Token         string
-	Region        string
-	Size          string
-	ConfigPath    string
-	PubKeyPath    string
-	PriKeyPath    string
-	ServiceFile   string
-	LatestVersion string
-}
-
-func (p providerDo) tfConfig(name, region, droplet, latestVersion string) error {
-	tf := doTerraform{
-		Name:          name,
-		Token:         p.token,
-		Region:        region,
-		Size:          droplet,
-		ConfigPath:    fmt.Sprintf("~/.darknode/darknodes/%v/config.json", name),
-		PubKeyPath:    fmt.Sprintf("~/.darknode/darknodes/%v/ssh_keypair.pub", name),
-		PriKeyPath:    fmt.Sprintf("~/.darknode/darknodes/%v/ssh_keypair", name),
-		ServiceFile:   darknodeService,
-		LatestVersion: latestVersion,
-	}
-
-	t, err := template.New("do").Parse(doTemplate)
-	if err != nil {
-		return err
-	}
-	tfFile, err := os.Create(filepath.Join(util.NodePath(name), "main.tf"))
-	if err != nil {
-		return err
-	}
-	return t.Execute(tfFile, tf)
-}
-
-var doTemplate = `
+var templateDO = `
 provider "digitalocean" {
   token = "{{.Token}}"
 }

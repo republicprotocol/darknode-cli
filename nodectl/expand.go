@@ -1,4 +1,4 @@
-package main
+package nodectl
 
 import (
 	"fmt"
@@ -8,9 +8,9 @@ import (
 	"strconv"
 
 	"github.com/fatih/color"
-	"github.com/renproject/darknode-cli/cmd/provider"
+	"github.com/renproject/darknode-cli/provider"
 	"github.com/renproject/darknode-cli/util"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func expand(ctx *cli.Context) error {
@@ -19,7 +19,7 @@ func expand(ctx *cli.Context) error {
 		return err
 	}
 	storageArg := ctx.Args().Get(1)
-	storage, err:= strconv.Atoi(storageArg)
+	storage, err := strconv.Atoi(storageArg)
 	if err != nil {
 		return err
 	}
