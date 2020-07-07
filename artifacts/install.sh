@@ -53,6 +53,9 @@ main() {
 
     # Output success message
     printf "\n\n"
+    printf 'If you are using a custom shell, make sure you update your PATH.'
+    printf "export PATH=\$PATH:\$HOME/.darknode/bin"
+    printf "\n\n"
     printf "Done! Restart terminal and run the command below to begin.\n"
     printf "\n"
     printf "darknode up --help\n"
@@ -152,10 +155,6 @@ add_path(){
 
         echo "" >> "$HOME/${file}"
         echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/${file}"
-
-        echo ''
-        echo 'If you are using a custom shell, make sure you update your PATH.'
-        echo "export PATH=\$PATH:\$HOME/.darknode/bin"
     fi
 }
 
