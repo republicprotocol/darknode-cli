@@ -13,7 +13,6 @@ main() {
 
     # Start installing
     echo "Installing Darknode CLI..."
-    ProgressBar 0 100
 
     # Check prerequisites
     prerequisites $terraform_ver || return 1
@@ -64,12 +63,11 @@ prerequisites() {
     need_cmd chmod
     need_cmd mkdir
     need_cmd rm
-    need_cmd rmdir
-    need_cmd unzip
 
     # Install unzip for user if not installed
     if ! check_cmd unzip; then
-        if ! sudo apt-get install unzip ; then
+        echo "installing prerequisites: unzip"
+        if ! sudo apt-get install unzip -qq; then
              err "need 'unzip' (command not found)"
         fi
     fi
@@ -125,36 +123,37 @@ check_architecture() {
 # Add the binary path to $PATH.
 add_path(){
     if ! check_cmd darknode; then
-      path=$SHELL
-      shell=${path##*/}
-
-      if [ "$shell" = 'zsh' ] ; then
-        if [ -f "$HOME/.zprofile" ] ; then
-          echo '\nexport PATH=$PATH:$HOME/.darknode/bin' >> $HOME/.zprofile
-        elif [ -f "$HOME/.zshrc" ] ; then
-          echo '\nexport PATH=$PATH:$HOME/.darknode/bin' >> $HOME/.zshrc
-        elif [ -f "$HOME/.profile" ] ; then
-          echo '\nexport PATH=$PATH:$HOME/.darknode/bin' >> $HOME/.profile
-        fi
-      elif  [ "$shell" = 'bash' ] ; then
-        if [ -f "$HOME/.bash_profile" ] ; then
-          echo '\nexport PATH=$PATH:$HOME/.darknode/bin' >> $HOME/.bash_profile
-        elif [ -f "$HOME/.bashrc" ] ; then
-          echo '\nexport PATH=$PATH:$HOME/.darknode/bin' >> $HOME/.bashrc
-        elif [ -f "$HOME/.profile" ] ; then
-          echo '\nexport PATH=$PATH:$HOME/.darknode/bin' >> $HOME/.profile
+        path=$SHELL
+        shell=${path##*/}
+        local file
+        if [ "$shell" = 'zsh' ] ; then
+            if [ -f "$HOME/.zprofile" ] ; then
+                file=".zprofile"
+            elif [ -f "$HOME/.zshrc" ] ; then
+                file=".zshrc"
+            elif [ -f "$HOME/.profile" ] ; then
+                file=".profile"
+            fi
+        elif  [ "$shell" = 'bash' ] ; then
+            if [ -f "$HOME/.bash_profile" ] ; then
+                file=".bash_profile"
+            elif [ -f "$HOME/.bashrc" ] ; then
+                file=".bashrc"
+            elif [ -f "$HOME/.profile" ] ; then
+                file=".profile"
+            else
+                file=".bash_profile"
+            fi
         else
-          echo '\nexport PATH=$PATH:$HOME/.darknode/bin' >> $HOME/.bash_profile
+            file=".profile"
         fi
-      elif [ -f "$HOME/.profile" ] ; then
-        echo '\nexport PATH=$PATH:$HOME/.darknode/bin' >> $HOME/.profile
-      else
-        echo '\nexport PATH=$PATH:$HOME/.darknode/bin' >> $HOME/.profile
-      fi
 
-      echo ''
-      echo 'If you are using a custom shell, make sure you update your PATH.'
-      echo "${GREEN}export PATH=\$PATH:\$HOME/.darknode/bin ${NC}"
+        echo "" >> "$HOME/${file}"
+        echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/${file}"
+
+        echo ''
+        echo 'If you are using a custom shell, make sure you update your PATH.'
+        echo "export PATH=\$PATH:\$HOME/.darknode/bin"
     fi
 }
 
@@ -172,6 +171,7 @@ need_cmd() {
 
 # Source: https://sh.rustup.rs
 err() {
+    echo ''
     echo "$1" >&2
     exit 1
 }
