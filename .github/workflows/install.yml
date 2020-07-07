@@ -10,8 +10,11 @@ jobs:
             - name: Check out code
               uses: actions/checkout@v2
             - name: Test installation script
-              run:
+              run: |
                   ./artifacts/install.sh
+            - name: Check bash_profile
+              run: |
+                  cat ~/.bash_profile
             - name: Check binary is properly installed
-              run:
+              run: |
                   command -v darknode
