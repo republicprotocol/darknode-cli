@@ -42,7 +42,6 @@ main() {
 
     # Download nodectl binary
     nodectl_url="https://www.github.com/renproject/darknode-cli/releases/latest/download/darknode_${ostype}_${cputype}"
-    echo $nodectl_url
     ensure downloader "$nodectl_url" "$HOME/.darknode/bin/darknode"
     ensure chmod +x "$HOME/.darknode/bin/darknode"
     ProgressBar 90 100
@@ -53,8 +52,8 @@ main() {
 
     # Output success message
     printf "\n\n"
-    printf 'If you are using a custom shell, make sure you update your PATH.'
-    printf "export PATH=\$PATH:\$HOME/.darknode/bin"
+    printf 'If you are using a custom shell, make sure you update your PATH.\n'
+    printf "     export PATH=\$PATH:\$HOME/.darknode/bin"
     printf "\n\n"
     printf "Done! Restart terminal and run the command below to begin.\n"
     printf "\n"
@@ -152,6 +151,7 @@ add_path(){
         else
             file=".profile"
         fi
+        echo $file
 
         echo "" >> "$HOME/${file}"
         echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/${file}"

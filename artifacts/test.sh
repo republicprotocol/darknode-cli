@@ -6,9 +6,9 @@ if [ "$?" -eq "0" ]; then
 fi
 
 # Source the profile for the shell
-. ~/.bash_profile
-. ~/.bashrc
-. ~/.profile
+source ~/.bash_profile
+source ~/.bashrc
+source ~/.profile
 
 # Check If darknode has been installed properly
 if ! darknode --version;then
