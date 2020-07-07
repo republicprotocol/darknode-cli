@@ -16,7 +16,7 @@ jobs:
               run: |
                   source ~/.bash_profile
                   echo $PATH
-                  ls ~/.darknode
+                  ls ~/.darknode/bin
             - name: Check binary is properly installed
               run: |
                   command -v darknode
