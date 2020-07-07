@@ -47,7 +47,7 @@ main() {
     ProgressBar 90 100
 
     # Check shell type and set PATH variable.
-    check_shell
+    add_path
     ProgressBar 100 100
 
     # Output success message
