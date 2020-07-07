@@ -12,9 +12,9 @@ jobs:
             - name: Test installation script
               run: |
                   ./artifacts/install.sh
-            - name: Check bash_profile
+            - name: source bash_profile
               run: |
-                  cat ~/.bash_profile
+                  source ~/.bash_profile
             - name: Check binary is properly installed
               run: |
                   command -v darknode
