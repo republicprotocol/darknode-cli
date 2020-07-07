@@ -19,4 +19,4 @@ jobs:
                   ls ~/.darknode/bin
             - name: Check binary is properly installed
               run: |
-                  command -v darknode
+                  source ~/.bash_profile || command -v darknode
