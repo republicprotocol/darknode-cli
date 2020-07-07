@@ -28,19 +28,21 @@ main() {
     ensure mkdir -p "$HOME/.darknode/bin"
 
     # Install terraform
+    if [ $cputype = "x86_64" ];then
+      cputype="amd64"
+    fi
     if ! check_cmd terraform; then
-        if [ $cputype = "x86_64" ];then
-          cputype="amd64"
-        fi
         terraform_url="https://releases.hashicorp.com/terraform/${terraform_ver}/terraform_${terraform_ver}_${ostype}_${cputype}.zip"
         ensure downloader "$terraform_url" "$HOME/.darknode/bin/terraform.zip"
         ensure unzip -qq "$HOME/.darknode/bin/terraform.zip" -d "$HOME/.darknode/bin"
         ensure chmod +x "$HOME/.darknode/bin/terraform"
+        rm "$HOME/.darknode/bin/terraform.zip"
     fi
     ProgressBar 50 100
 
     # Download nodectl binary
     nodectl_url="https://www.github.com/renproject/darknode-cli/releases/latest/download/darknode_${ostype}_${cputype}"
+    echo $nodectl_url
     ensure downloader "$nodectl_url" "$HOME/.darknode/bin/darknode"
     ensure chmod +x "$HOME/.darknode/bin/darknode"
     ProgressBar 90 100
