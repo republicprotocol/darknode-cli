@@ -1,0 +1,17 @@
+name: install
+on: [push]
+jobs:
+    aws:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-latest, macos-latest]
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v2
+            - name: Test installation script
+              run:
+                  ./artifacts/test.sh "$(pwd)/artifacts/install.sh"
+
+
+
