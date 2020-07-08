@@ -21,7 +21,7 @@ main() {
     ostype="$(uname -s | tr '[:upper:]' '[:lower:]')"
     cputype="$(uname -m | tr '[:upper:]' '[:lower:]')"
     check_architecture "$ostype" "$cputype"
-    progressBar 10 100
+    ProgressBar 10 100
 
     # Initialization
     ensure mkdir -p "$HOME/.darknode/darknodes"
@@ -38,17 +38,17 @@ main() {
         ensure chmod +x "$HOME/.darknode/bin/terraform"
         rm "$HOME/.darknode/bin/terraform.zip"
     fi
-    progressBar 50 100
+    ProgressBar 50 100
 
     # Download darknode binary
     nodectl_url="https://www.github.com/renproject/darknode-cli/releases/latest/download/darknode_${ostype}_${cputype}"
     ensure downloader "$nodectl_url" "$HOME/.darknode/bin/darknode"
     ensure chmod +x "$HOME/.darknode/bin/darknode"
-    progressBar 90 100
+    ProgressBar 90 100
 
     # Check shell type and set PATH variable.
     add_path
-    progressBar 100 100
+    ProgressBar 100 100
 
     # Output success message
     printf "\n\n"
@@ -225,7 +225,7 @@ check_help_for() {
 }
 
 # Source: https://github.com/fearside/ProgressBar
-progressBar() {
+function ProgressBar(){
     _progress=$((($1*100/$2)))
     _done=$(((_progress*4)/10))
     _left=$((40-_done))
