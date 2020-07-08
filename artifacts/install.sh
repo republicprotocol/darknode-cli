@@ -226,12 +226,18 @@ check_help_for() {
 
 # Source: https://github.com/fearside/ProgressBar
 progressBar() {
-    _progress=$((($1*100/$2)))
-    _done=$(((_progress*4)/10))
-    _left=$((40-_done))
-    _done=$(printf "%${_done}s")
-    _left=$(printf "%${_left}s")
-    printf "\rProgress : [${_done// /#}${_left// /-}] ${_progress}%%"
+    _progress=$1
+    _done=$((_progress*5/10))
+    _left=$((50-_done))
+    done=""
+    if ! [ $_done = "0" ];then
+        done=$(printf '#%.0s' $(seq $_done))
+    fi
+    left=""
+    if ! [ $_left = "0" ];then
+      left=$(printf '=%.0s' $(seq $_left))
+    fi
+    printf "\rProgress : [$done$left] ${_progress}%%"
 }
 
 main "$@" || exit 1
