@@ -225,7 +225,7 @@ check_help_for() {
 }
 
 # Source: https://github.com/fearside/ProgressBar
-function ProgressBar(){
+function ProgressBar {
     _progress=$((($1*100/$2)))
     _done=$(((_progress*4)/10))
     _left=$((40-_done))
