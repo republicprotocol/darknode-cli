@@ -13,7 +13,6 @@ jobs:
               run:  cat ./artifacts/install.sh | sh
             - name: Check binary is properly installed
               run: |
-                  echo $PATH
                   source ~/.bash_profile || command -v darknode
     zsh:
         runs-on: ${{ matrix.os }}
@@ -34,7 +33,11 @@ jobs:
             - name: Check binary is properly installed
               shell: zsh {0}
               run: |
-                  echo $PATH
-                  source ~/.zprofile || command -v darknode
+                  if [ -f "$HOME/.zprofile" ] ; then
+                      source ~/.zprofile || command -v darknode
+                  else
+                      source ~/.profile || command -v darknode
+                  fi
+
 
 
