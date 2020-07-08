@@ -27,6 +27,9 @@ jobs:
               run: |
                   sudo apt-get update
                   sudo apt-get install zsh
+            - name: Set zsh as default shell
+              run: |
+                chsh -s /bin/zsh
             - name: Test installation script
               shell: zsh {0}
               run: cat ./artifacts/install.sh | sh
@@ -51,6 +54,9 @@ jobs:
               run: |
                   sudo apt-get update
                   sudo apt-get install ksh
+            - name: Set ksh as default shell
+              run: |
+                  chsh -s /bin/ksh
             - name: Test installation script
               shell: ksh {0}
               run: cat ./artifacts/install.sh | sh
