@@ -30,7 +30,7 @@ jobs:
                   ls -la $HOME
             - name: Test installation script
               shell: zsh {0}
-              run: cat ./artifacts/install.sh | sh
+              run: cat ./artifacts/install.sh | bash
             - name: Check binary is properly installed
               shell: zsh {0}
               run: |
