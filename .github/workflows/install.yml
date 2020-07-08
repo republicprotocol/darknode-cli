@@ -10,11 +10,9 @@ jobs:
             - name: Check out code
               uses: actions/checkout@v2
             - name: Test installation script
-              shell: bash
               run: |
                   ./artifacts/install.sh
             - name: Check binary is properly installed
-              shell: bash
               run: |
                   source ~/.bash_profile || command -v darknode
     zsh:
@@ -25,6 +23,11 @@ jobs:
         steps:
             - name: Check out code
               uses: actions/checkout@v2
+            - name: Install zsh
+              if: runner.os == 'Linux'
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install zsh
             - name: Test installation script
               shell: zsh {0}
               run: |
