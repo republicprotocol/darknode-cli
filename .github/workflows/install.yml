@@ -38,6 +38,26 @@ jobs:
                   else
                       source ~/.profile || command -v darknode
                   fi
+    ksh:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-latest, macos-latest]
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v2
+            - name: Install ksh
+              if: runner.os == 'Linux'
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install ksh
+            - name: Test installation script
+              shell: ksh {0}
+              run: cat ./artifacts/install.sh | sh
+            - name: Check binary is properly installed
+              shell: ksh {0}
+              run: |
+                  source ~/.profile || command -v darknode
 
 
 
