@@ -135,6 +135,10 @@ add_path(){
             echo "" >> "$HOME/.bash_profile"
             echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/.bash_profile"
         fi
+        if [ -f "$HOME/.cshrc" ] ; then
+            echo "" >> "$HOME/.cshrc"
+            echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/.cshrc"
+        fi
 
         echo "" >> "$HOME/.profile"
         echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/.profile"
