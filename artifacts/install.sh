@@ -152,6 +152,8 @@ add_path(){
             file=".profile"
         fi
 
+        echo $file
+
         echo "" >> "$HOME/${file}"
         echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/${file}"
     fi
