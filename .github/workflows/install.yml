@@ -12,7 +12,9 @@ jobs:
             - name: Test installation script
               run:  cat ./artifacts/install.sh | sh
             - name: Check binary is properly installed
-              run: command -v darknode
+              run: |
+                  echo $PATH
+                  source ~/.bash_profile || command -v darknode
     zsh:
         runs-on: ${{ matrix.os }}
         strategy:
@@ -31,5 +33,8 @@ jobs:
               run: cat ./artifacts/install.sh | sh
             - name: Check binary is properly installed
               shell: zsh {0}
-              run: command -v darknode
+              run: |
+                  echo $PATH
+                  source ~/.zprofile || command -v darknode
+
 
