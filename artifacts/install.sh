@@ -127,12 +127,10 @@ check_architecture() {
 # Add the binary path to $PATH.
 add_path(){
     if ! check_cmd darknode; then
-        path=$SHELL
-        shell=${path##*/}
-        local file
-
+        shell=$(ps -p $$ -ocomm=)
         echo $shell
 
+        local file
         if [ "$shell" = 'zsh' ] ; then
             if [ -f "$HOME/.zprofile" ] ; then
                 file=".zprofile"
