@@ -1,7 +1,7 @@
-name: install
+name: install script
 on: [push]
 jobs:
-    aws:
+    bash:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
@@ -10,13 +10,26 @@ jobs:
             - name: Check out code
               uses: actions/checkout@v2
             - name: Test installation script
+              shell: bash
               run: |
                   ./artifacts/install.sh
-            - name: source bash_profile
-              run: |
-                  source ~/.bash_profile
-                  echo $PATH
-                  ls ~/.darknode/bin
             - name: Check binary is properly installed
+              shell: bash
               run: |
                   source ~/.bash_profile || command -v darknode
+    zsh:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-latest, macos-latest]
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v2
+            - name: Test installation script
+              shell: zsh {0}
+              run: |
+                  ./artifacts/install.sh
+            - name: Check binary is properly installed
+              shell: zsh {0}
+              run: |
+                  source ~/.zprofile || command -v darknode
