@@ -10,8 +10,7 @@ jobs:
             - name: Check out code
               uses: actions/checkout@v2
             - name: Test installation script
-              run: |
-                  ./artifacts/install.sh
+              run:  cat ./artifacts/install.sh | sh
             - name: Check binary is properly installed
               run: |
                   source ~/.bash_profile || command -v darknode
@@ -31,8 +30,7 @@ jobs:
                   ls -la $HOME
             - name: Test installation script
               shell: zsh {0}
-              run: |
-                 zsh ./artifacts/install.sh
+              run: cat ./artifacts/install.sh | sh
             - name: Check binary is properly installed
               shell: zsh {0}
               run: |
