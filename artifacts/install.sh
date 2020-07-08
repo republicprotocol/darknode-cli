@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -u
 
@@ -127,37 +127,18 @@ check_architecture() {
 # Add the binary path to $PATH.
 add_path(){
     if ! check_cmd darknode; then
-        shell=$(ps -p $$ -ocomm=)
-        echo $shell
-        echo $SHELL
-
-        local file
-        if [ "$shell" = 'zsh' ] ; then
-            if [ -f "$HOME/.zprofile" ] ; then
-                file=".zprofile"
-            elif [ -f "$HOME/.zshrc" ] ; then
-                file=".zshrc"
-            elif [ -f "$HOME/.profile" ] ; then
-                file=".profile"
-            fi
-        elif  [ "$shell" = 'bash' ] ; then
-            if [ -f "$HOME/.bash_profile" ] ; then
-                file=".bash_profile"
-            elif [ -f "$HOME/.bashrc" ] ; then
-                file=".bashrc"
-            elif [ -f "$HOME/.profile" ] ; then
-                file=".profile"
-            else
-                file=".bash_profile"
-            fi
-        else
-            file=".profile"
+        if [ -f "$HOME/.zprofile" ] ; then
+            echo "" >> "$HOME/.zprofile"
+            echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/.zprofile"
         fi
-
-        echo $file
-
-        echo "" >> "$HOME/${file}"
-        echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/${file}"
+        if [ -f "$HOME/.bash_profile" ] ; then
+            echo "" >> "$HOME/.bash_profile"
+            echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/.bash_profile"
+        fi
+        if [ -f "$HOME/.profile" ] ; then
+            echo "" >> "$HOME/.profile"
+            echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/.profile"
+        fi
     fi
 }
 

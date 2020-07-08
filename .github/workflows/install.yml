@@ -12,8 +12,7 @@ jobs:
             - name: Test installation script
               run:  cat ./artifacts/install.sh | sh
             - name: Check binary is properly installed
-              run: |
-                  source ~/.bash_profile || command -v darknode
+              run: command -v darknode
     zsh:
         runs-on: ${{ matrix.os }}
         strategy:
@@ -27,17 +26,10 @@ jobs:
               run: |
                   sudo apt-get update
                   sudo apt-get install zsh
-                  ls -la $HOME
             - name: Test installation script
               shell: zsh {0}
               run: cat ./artifacts/install.sh | sh
             - name: Check binary is properly installed
               shell: zsh {0}
-              run: |
-                  if [ -f "$HOME/.zprofile" ] ; then
-                      source ~/.zprofile || command -v darknode
-                  elif [ -f "$HOME/.zshrc" ] ; then
-                      source ~/.zshrc || command -v darknode
-                  elif [ -f "$HOME/.profile" ] ; then
-                      source ~/.profile || command -v darknode
-                  fi
+              run: command -v darknode
+
