@@ -130,6 +130,9 @@ add_path(){
         path=$SHELL
         shell=${path##*/}
         local file
+
+        echo $shell
+
         if [ "$shell" = 'zsh' ] ; then
             if [ -f "$HOME/.zprofile" ] ; then
                 file=".zprofile"

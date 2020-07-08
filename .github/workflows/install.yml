@@ -31,7 +31,7 @@ jobs:
             - name: Test installation script
               shell: zsh {0}
               run: |
-                  ./artifacts/install.sh
+                  zsh ./artifacts/install.sh
             - name: Check binary is properly installed
               shell: zsh {0}
               run: |
