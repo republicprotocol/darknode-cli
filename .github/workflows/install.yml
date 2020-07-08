@@ -31,8 +31,14 @@ jobs:
             - name: Test installation script
               shell: zsh {0}
               run: |
-                  zsh ./artifacts/install.sh
+                  ./artifacts/install.sh
             - name: Check binary is properly installed
               shell: zsh {0}
               run: |
-                  source ~/.zprofile || command -v darknode
+                  if [ -f "$HOME/.zprofile" ] ; then
+                      source ~/.zprofile || command -v darknode
+                  elif [ -f "$HOME/.zshrc" ] ; then
+                      source ~/.zshrc || command -v darknode
+                  elif [ -f "$HOME/.profile" ] ; then
+                      source ~/.profile || command -v darknode
+                  fi
