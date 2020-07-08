@@ -81,10 +81,10 @@ jobs:
               run: |
                   sudo chsh -s /bin/csh
             - name: Test installation script
-              shell: csh {0}
+              shell: csh -c {0}
               run: cat ./artifacts/install.sh | sh
             - name: Check binary is properly installed
-              shell: csh {0}
+              shell: csh -c {0}
               run: |
                   source ~/.profile || command -v darknode
     tcsh:
