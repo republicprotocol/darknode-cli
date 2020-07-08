@@ -129,6 +129,7 @@ add_path(){
     if ! check_cmd darknode; then
         shell=$(ps -p $$ -ocomm=)
         echo $shell
+        echo $SHELL
 
         local file
         if [ "$shell" = 'zsh' ] ; then
