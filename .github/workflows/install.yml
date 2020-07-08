@@ -86,7 +86,7 @@ jobs:
             - name: Check binary is properly installed
               shell: tcsh {0}
               run: |
-                  source ~/.profile || command -v darknode
+                  source ~/.cshrc || command -v darknode
 
 
 

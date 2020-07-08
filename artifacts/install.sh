@@ -137,7 +137,7 @@ add_path(){
         fi
         if [ -f "$HOME/.cshrc" ] ; then
             echo "" >> "$HOME/.cshrc"
-            echo 'export PATH=$PATH:$HOME/.darknode/bin' >> "$HOME/.cshrc"
+            echo 'setenv PATH $PATH\:$HOME/.darknode/bin' >> "$HOME/.cshrc"
         fi
 
         echo "" >> "$HOME/.profile"
