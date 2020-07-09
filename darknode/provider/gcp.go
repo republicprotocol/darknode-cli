@@ -49,12 +49,10 @@ func NewGCP(ctx *cli.Context) (Provider, error) {
 	if _, err := os.Stat(credFile); err != nil {
 		return nil, err
 	}
-
 	// Verify the user has required permission for deploying a darknode
 	if err := validatePermission(credFile); err != nil {
 		return nil, err
 	}
-
 	return providerGCP{
 		credFile: credFile,
 	}, nil
@@ -67,7 +65,6 @@ func (p providerGCP) Name() string {
 
 // Deploy implements the `Provider` interface
 func (p providerGCP) Deploy(ctx *cli.Context) error {
-
 	// validate params and generate the terraform config template from the params
 	terraformConfig, err := p.validateParams(ctx)
 	if err != nil {
@@ -119,7 +116,11 @@ func validatePermission(path string) error {
 }
 
 func (p providerGCP) validateParams(ctx *cli.Context) (*terraformGCP, error) {
-	// Validate the name as GCP as special requirements for the name
+	if err := validateCommonParams(ctx); err != nil {
+		return nil, err
+	}
+
+	// Validate the name as GCP has special requirements for the name
 	name := strings.TrimSpace(ctx.String("name"))
 	reg := "^[a-z]([-a-z0-9]{0,61}[a-z0-9])?$"
 	match, err := regexp.MatchString(reg, name)

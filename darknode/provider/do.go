@@ -66,6 +66,9 @@ func (p providerDO) Deploy(ctx *cli.Context) error {
 
 func (p providerDO) validateParams(ctx *cli.Context) (*terraformDO, error) {
 	name := ctx.String("name")
+	if err := validateCommonParams(ctx); err != nil {
+		return nil, err
+	}
 	region, err := p.validateRegion(ctx)
 	if err != nil {
 		return nil, err
@@ -128,12 +131,6 @@ func (p providerDO) validateRegion(ctx *cli.Context) (godo.Region, error) {
 func (p providerDO) validateDroplet(ctx *cli.Context, region godo.Region) (string, error) {
 	droplet := ctx.String("do-droplet")
 	if !util.StringInSlice(droplet, region.Sizes) {
-		fmt.Printf("[%v] is the selected droplet region.\n", region)
-		fmt.Printf("Your account can only create below slugs in [%v]:\n", region)
-		for i := range region.Sizes {
-			fmt.Println(region.Sizes[i])
-		}
-		fmt.Println("You can find more details about these slugs from https://www.digitalocean.com/pricing")
 		return "", ErrInstanceTypeNotAvailable
 	}
 	return droplet, nil

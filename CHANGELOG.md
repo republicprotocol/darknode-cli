@@ -1,9 +1,12 @@
-## 3.0.12
-- Validate GCP node name 
-- Dynamically validate the availability of the provided region and instance type. 
-- Fix issue when providing a relative path for the credential file. 
-- Remove deprecated syntax from the terraform config file.
-- No longer install jq in the deployment process.
+## 3.1.0
+- Dynamically validate the availability of the provided region and instance type.
+- Fix issue when providing an invalid name for GCP node 
+- Fix issue when providing a relative path for the credential file.
+- Fix GCP terraform config using deprecated syntax. 
+- Remove installation of jq in the deployment process.
+- Improve the installation script.
+- Set up automated tests in CI 
+- Validate terraform existence and version before running certain commands. 
 
 ## 3.0.11
 - Use suggest gas price for withdrawing ETH.

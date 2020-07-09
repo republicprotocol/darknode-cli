@@ -97,6 +97,45 @@ func GetProvider(name string) (string, error) {
 	return strings.TrimSpace(provider), err
 }
 
+// Validate the params which are available for all providers.
+func validateCommonParams(ctx *cli.Context) error {
+	// Validate common params
+	name := ctx.String("name")
+	if name == "" {
+		return util.ErrEmptyName
+	}
+	if _, err := os.Stat(util.NodePath(name)); err == nil {
+		return fmt.Errorf("node [%v] already exist", name)
+	}
+	_, err := renvm.NewNetwork(ctx.String("network"))
+	if err != nil {
+		return err
+	}
+
+	// Verify the config file if user wants to use their own config
+	configFile := ctx.String("config")
+	if configFile != "" {
+		// verify the config exist and of the right format
+		path, err := filepath.Abs(configFile)
+		if err != nil {
+			return err
+		}
+		if _, err := os.Stat(path); err != nil {
+			return errors.New("config file doesn't exist")
+		}
+		jsonFile, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer jsonFile.Close()
+		var config renvm.Config
+		if err := json.NewDecoder(jsonFile).Decode(&config); err != nil {
+			return fmt.Errorf("incompatible config, err = %v", err)
+		}
+	}
+	return nil
+}
+
 // Initialize files for deploying a darknode
 func initNode(ctx *cli.Context, data interface{}, temp *template.Template) error {
 	name := ctx.String("name")

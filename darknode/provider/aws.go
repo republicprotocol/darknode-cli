@@ -85,6 +85,9 @@ func (p providerAWS) Deploy(ctx *cli.Context) error {
 
 func (p providerAWS) validateParams(ctx *cli.Context) (*terraformAWS, error) {
 	name := ctx.String("name")
+	if err := validateCommonParams(ctx); err != nil {
+		return nil, err
+	}
 	region, err := p.validateRegion(ctx)
 	if err != nil {
 		return nil, err
