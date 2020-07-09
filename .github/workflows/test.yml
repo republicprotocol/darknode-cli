@@ -1,72 +1,7 @@
 name: test
 on: [push]
 jobs:
-#    aws:
-#        runs-on: ${{ matrix.os }}
-#        strategy:
-#            matrix:
-#                os: [ubuntu-latest, macos-latest]
-#        steps:
-#            - name: Check out code
-#              uses: actions/checkout@v2
-#            - name: Initialization
-#              run: |
-#                  mkdir -p $HOME/.darknode/bin
-#                  mkdir -p $HOME/.darknode/darknodes
-#                  echo "::add-path::$HOME/.darknode/bin"
-#            - if: matrix.os == 'macos-latest'
-#              run: |
-#                  curl -s "https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_darwin_amd64.zip" > terraform.zip
-#                  unzip terraform
-#                  chmod +x terraform
-#                  mv terraform $HOME/.darknode/bin/terraform
-#                  rm terraform.zip
-#            - name: Build and install the darknode-cli
-#              run: |
-#                  make
-#                  mv $(make target_name) $HOME/.darknode/bin/darknode
-#                  darknode --version
-#            - name: Test darknode deployment
-#              env:
-#                  ACCESS_TOKEN   : ${{ secrets.ACCESS_TOKEN }}
-#                  aws_access_key : ${{ secrets.AWS_ACCESS_KEY_ID}}
-#                  aws_secret_key : ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-#              run: |
-#                  chmod +x ./test/aws.sh
-#                  ./test/aws.sh ${{ matrix.os }}
-#    do:
-#        runs-on: ${{ matrix.os }}
-#        strategy:
-#            matrix:
-#                os: [ubuntu-latest, macos-latest]
-#        steps:
-#            - name: Check out code
-#              uses: actions/checkout@v2
-#            - name: Initialization
-#              run: |
-#                  mkdir -p $HOME/.darknode/bin
-#                  mkdir -p $HOME/.darknode/darknodes
-#                  echo "::add-path::$HOME/.darknode/bin"
-#            - if: matrix.os == 'macos-latest'
-#              run: |
-#                  curl -s "https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_darwin_amd64.zip" > terraform.zip
-#                  unzip terraform
-#                  chmod +x terraform
-#                  mv terraform $HOME/.darknode/bin/terraform
-#                  rm terraform.zip
-#            - name: Build and install the darknode-cli
-#              run: |
-#                  make
-#                  mv $(make target_name) $HOME/.darknode/bin/darknode
-#                  darknode --version
-#            - name: Test darknode deployment
-#              env:
-#                  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-#                  do_token: ${{ secrets.DO_TOKEN}}
-#              run: |
-#                  chmod +x ./test/do.sh
-#                  ./test/do.sh ${{ matrix.os }}
-    gcp:
+    test:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
@@ -82,6 +17,12 @@ jobs:
                   gpg --quiet --batch --yes --decrypt --passphrase="$GCP_PASSPHRASE" \
                   --output $HOME/secrets/credentials.json ./.github/workflows/credentials.json.gpg
                   echo ::set-env name=gcp_credentials::$HOME/secrets/credentials.json
-            - name: Test credential file has been correctly decrypted
+            - name: Run the integration tests
+              env:
+                  ACCESS_TOKEN   : ${{ secrets.ACCESS_TOKEN }}
+                  aws_access_key : ${{ secrets.AWS_ACCESS_KEY_ID}}
+                  aws_secret_key : ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+                  do_token       : ${{ secrets.DO_TOKEN}}
               run: |
-                  cat $HOME/secrets/credentials.json
+                  go get -u github.com/onsi/ginkgo/ginkgo
+                  ginkgo -v --race
