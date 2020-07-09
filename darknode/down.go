@@ -1,4 +1,4 @@
-package nodectl
+package darknode
 
 import (
 	"bufio"
@@ -16,8 +16,8 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/fatih/color"
-	"github.com/renproject/darknode-cli/darknode"
-	"github.com/renproject/darknode-cli/darknode/bindings"
+	"github.com/renproject/darknode-cli/renvm"
+	"github.com/renproject/darknode-cli/renvm/bindings"
 	"github.com/renproject/darknode-cli/util"
 	"github.com/renproject/mercury/sdk/client/ethclient"
 	"github.com/renproject/mercury/types/ethtypes"
@@ -198,11 +198,11 @@ func transfer(transactor *bind.TransactOpts, receiver common.Address, amount eth
 }
 
 // renAddress on different network
-func renAddress(network darknode.Network) string {
+func renAddress(network renvm.Network) string {
 	switch network {
-	case darknode.Mainnet, darknode.Chaosnet:
+	case renvm.Mainnet, renvm.Chaosnet:
 		return "0x408e41876cCCDC0F92210600ef50372656052a38"
-	case darknode.Testnet, darknode.Devnet:
+	case renvm.Testnet, renvm.Devnet:
 		return "0x2CD647668494c1B15743AB283A0f980d90a87394"
 	default:
 		panic("unknown network")
@@ -210,12 +210,12 @@ func renAddress(network darknode.Network) string {
 }
 
 // connect to Ethereum.
-func connect(network darknode.Network) (ethclient.Client, error) {
+func connect(network renvm.Network) (ethclient.Client, error) {
 	logger := logrus.New()
 	switch network {
-	case darknode.Mainnet, darknode.Chaosnet:
+	case renvm.Mainnet, renvm.Chaosnet:
 		return ethclient.New(logger, ethtypes.Mainnet)
-	case darknode.Testnet, darknode.Devnet:
+	case renvm.Testnet, renvm.Devnet:
 		return ethclient.New(logger, ethtypes.Kovan)
 	default:
 		return nil, errors.New("unknown network")

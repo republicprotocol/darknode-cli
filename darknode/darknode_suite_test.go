@@ -1,4 +1,4 @@
-package nodectl_test
+package darknode_test
 
 import (
 	"fmt"
@@ -20,9 +20,9 @@ var _ = BeforeSuite(func() {
 	Expect(os.Getenv("aws_secret_key")).ShouldNot(BeEmpty())
 })
 
-func TestNodectl(t *testing.T) {
+func TestDarknode(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Nodectl Suite")
+	RunSpecs(t, "Darknode Suite")
 }
 
 func flag(name, value string) string {

@@ -1,11 +1,11 @@
-package nodectl_test
+package darknode_test
 
 import (
 	"os"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/renproject/darknode-cli/nodectl"
+	. "github.com/renproject/darknode-cli/darknode"
 )
 
 var _ = Describe("list command", func() {

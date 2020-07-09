@@ -1,4 +1,4 @@
-package nodectl
+package darknode
 
 import (
 	"encoding/json"
@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 
 	"github.com/fatih/color"
-	"github.com/renproject/darknode-cli/darknode"
 	"github.com/renproject/darknode-cli/provider"
+	"github.com/renproject/darknode-cli/renvm"
 	"github.com/renproject/darknode-cli/util"
 	"github.com/urfave/cli/v2"
 )
@@ -17,7 +17,7 @@ import (
 // Create new cli application
 func App() *cli.App {
 	app := cli.NewApp()
-	app.Name = "Nodectl"
+	app.Name = "darknode"
 	app.Usage = "A command-line tool for managing Ren nodes."
 	app.EnableBashCompletion = true
 
@@ -45,7 +45,7 @@ func App() *cli.App {
 				if _, err := os.Stat(util.NodePath(name)); err == nil {
 					return fmt.Errorf("node [%v] already exist", name)
 				}
-				_, err := darknode.NewNetwork(ctx.String("network"))
+				_, err := renvm.NewNetwork(ctx.String("network"))
 				if err != nil {
 					return err
 				}
@@ -66,7 +66,7 @@ func App() *cli.App {
 						return err
 					}
 					defer jsonFile.Close()
-					var config darknode.Config
+					var config renvm.Config
 					if err := json.NewDecoder(jsonFile).Decode(&config); err != nil {
 						return fmt.Errorf("incompatible config, err = %v", err)
 					}
@@ -194,7 +194,7 @@ func App() *cli.App {
 	// Show error message and display the help page when command is not found.
 	app.CommandNotFound = func(c *cli.Context, command string) {
 		color.Red("[Warning] command '%q' not found", command)
-		color.Red("[Warning] run 'nodectl --help' for a list of available commands", command)
+		color.Red("[Warning] run 'darknode --help' for a list of available commands", command)
 	}
 
 	return app

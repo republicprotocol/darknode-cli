@@ -1,4 +1,4 @@
-package nodectl_test
+package darknode_test
 
 import (
 	"fmt"
@@ -8,10 +8,10 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	. "github.com/renproject/darknode-cli/nodectl"
+	. "github.com/renproject/darknode-cli/darknode"
 )
 
-var _ = Describe("Nodectl", func() {
+var _ = Describe("darknode", func() {
 
 	Context("when deploying node on AWS", func() {
 		node := fmt.Sprintf("aws-testing-%v", runtime.GOOS)

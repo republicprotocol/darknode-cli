@@ -41,8 +41,8 @@ main() {
     progressBar 50 100
 
     # Download darknode binary
-    nodectl_url="https://www.github.com/renproject/darknode-cli/releases/latest/download/darknode_${ostype}_${cputype}"
-    ensure downloader "$nodectl_url" "$HOME/.darknode/bin/darknode"
+    darknode_url="https://www.github.com/renproject/darknode-cli/releases/latest/download/darknode_${ostype}_${cputype}"
+    ensure downloader "$darknode_url" "$HOME/.darknode/bin/darknode"
     ensure chmod +x "$HOME/.darknode/bin/darknode"
     progressBar 90 100
 

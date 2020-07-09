@@ -28,10 +28,10 @@ func GithubClient(ctx context.Context) *github.Client {
 	return github.NewClient(client)
 }
 
-// CurrentReleaseVersion queries the Github API and fetch the latest release version of nodectl.
+// CurrentReleaseVersion queries the Github API and fetch the latest release version of darknode-cli.
 func CurrentReleaseVersion(ctx context.Context) (*version.Version, error) {
 	client := GithubClient(ctx)
-	release, response, err := client.Repositories.GetLatestRelease(ctx, "renproject", "nodectl")
+	release, response, err := client.Repositories.GetLatestRelease(ctx, "renproject", "darknode-cli")
 	if err != nil {
 		return nil, err
 	}

@@ -1,4 +1,4 @@
-package nodectl
+package darknode
 
 import (
 	"context"

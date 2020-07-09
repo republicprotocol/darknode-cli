@@ -1,4 +1,4 @@
-package darknode
+package renvm
 
 import (
 	"bytes"
@@ -12,9 +12,9 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/renproject/aw"
-	"github.com/renproject/darknode-cli/darknode/addr"
-	"github.com/renproject/darknode-cli/darknode/bindings"
-	"github.com/renproject/darknode-cli/darknode/keystore"
+	"github.com/renproject/darknode-cli/renvm/addr"
+	"github.com/renproject/darknode-cli/renvm/bindings"
+	"github.com/renproject/darknode-cli/renvm/keystore"
 )
 
 // Config is an in-memory description of the configuration file that will be

@@ -8,7 +8,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/hashicorp/go-version"
-	"github.com/renproject/darknode-cli/nodectl"
+	"github.com/renproject/darknode-cli/darknode"
 	"github.com/renproject/darknode-cli/util"
 )
 
@@ -21,7 +21,7 @@ func init() {
 }
 
 func main() {
-	app := nodectl.App()
+	app := darknode.App()
 	app.Version = binaryVersion
 
 	// Fetch latest release and check if our version is behind.
@@ -35,7 +35,7 @@ func main() {
 	}
 }
 
-// checkUpdates fetches the latest release of `nodectl` from github and compares the versions. It warns the user if
+// checkUpdates fetches the latest release of `darknode-cli` from github and compares the versions. It warns the user if
 // current version is out of date.
 func checkUpdates(curVer string) {
 	// Get latest release
@@ -57,6 +57,6 @@ func checkUpdates(curVer string) {
 	if versionCurrent.LessThan(versionLatest) {
 		color.Red("You are running %v", curVer)
 		color.Red("A new release is available (%v)", versionLatest.String())
-		color.Red("You can update your nodectl with `nodectl upgrade` command")
+		color.Red("You can update your darknode-cli with `darknode self update` command")
 	}
 }

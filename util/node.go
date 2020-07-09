@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/renproject/darknode-cli/darknode"
-	"github.com/renproject/darknode-cli/darknode/addr"
+	"github.com/renproject/darknode-cli/renvm"
+	"github.com/renproject/darknode-cli/renvm/addr"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -53,15 +53,15 @@ func ValidateNodeName(name string) error {
 }
 
 // Config returns the config of the node with given name.
-func Config(name string) (darknode.GeneralConfig, error) {
+func Config(name string) (renvm.GeneralConfig, error) {
 	path := filepath.Join(NodePath(name), "config.json")
-	return darknode.NewConfigFromJSONFile(path)
+	return renvm.NewConfigFromJSONFile(path)
 }
 
 // ID gets the ID of the node with given name.
 func ID(name string) (addr.ID, error) {
 	path := filepath.Join(NodePath(name), "config.json")
-	config, err := darknode.NewConfigFromJSONFile(path)
+	config, err := renvm.NewConfigFromJSONFile(path)
 	if err != nil {
 		return addr.ID{}, err
 	}
@@ -90,9 +90,9 @@ func Version(name string) string {
 }
 
 // Network gets the network of the darknode.
-func Network(name string) (darknode.Network, error) {
+func Network(name string) (renvm.Network, error) {
 	path := filepath.Join(NodePath(name), "config.json")
-	config, err := darknode.NewConfigFromJSONFile(path)
+	config, err := renvm.NewConfigFromJSONFile(path)
 	if err != nil {
 		return "", err
 	}
@@ -102,7 +102,7 @@ func Network(name string) (darknode.Network, error) {
 // RegisterUrl returns the url for registering a particular darknode.
 func RegisterUrl(name string) (string, error) {
 	path := filepath.Join(NodePath(name), "config.json")
-	config, err := darknode.NewConfigFromJSONFile(path)
+	config, err := renvm.NewConfigFromJSONFile(path)
 	if err != nil {
 		return "", err
 	}

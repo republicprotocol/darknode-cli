@@ -1,10 +1,10 @@
-package darknode
+package renvm
 
 import (
 	"errors"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/renproject/darknode-cli/darknode/addr"
+	"github.com/renproject/darknode-cli/renvm/addr"
 )
 
 // The Network type defines the different RenVM networks that exist.

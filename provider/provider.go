@@ -11,7 +11,7 @@ import (
 	"text/template"
 
 	"github.com/fatih/color"
-	"github.com/renproject/darknode-cli/darknode"
+	"github.com/renproject/darknode-cli/renvm"
 	"github.com/renproject/darknode-cli/util"
 	"github.com/urfave/cli/v2"
 )
@@ -148,8 +148,8 @@ func initConfig(ctx *cli.Context) error {
 		}
 		return ioutil.WriteFile(destination, input, 0600)
 	} else {
-		network, _ := darknode.NewNetwork(ctx.String("network"))
-		config, err := darknode.NewConfig(network)
+		network, _ := renvm.NewNetwork(ctx.String("network"))
+		config, err := renvm.NewConfig(network)
 		if err != nil {
 			return err
 		}
