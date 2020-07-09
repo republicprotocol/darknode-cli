@@ -1,6 +1,6 @@
-#name: test
-#on: [push]
-#jobs:
+name: test
+on: [push]
+jobs:
 #    aws:
 #        runs-on: ${{ matrix.os }}
 #        strategy:
@@ -66,27 +66,22 @@
 #              run: |
 #                  chmod +x ./test/do.sh
 #                  ./test/do.sh ${{ matrix.os }}
-##    gcp:
-##        runs-on: ${{ matrix.os }}
-##        strategy:
-##            matrix:
-##                os: [ubuntu-latest, macos-latest]
-##        steps:
-##            - name: Check out code
-##              uses: actions/checkout@v2
-##            - name: Initialization
-##              run: |
-##                  mkdir -p $HOME/.darknode/bin
-##                  mkdir -p $HOME/.darknode/darknodes
-##                  echo "::add-path::$HOME/.darknode/bin"
-##            - name: Build and install the darknode-cli
-##              run: |
-##                  make
-##                  mv $(make target_name) $HOME/.darknode/bin/darknode
-##                  darknode --version
-##            - name: Test darknode deployment
-##              env:
-##                  do_token: ${{ secrets.DO_TOKEN}}
-##              run: |
-##                  chmod +x ./test/gcp.sh
-##                  ./test/gcp.sh
+    gcp:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-latest, macos-latest]
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v2
+            - name: Decrypt the credential file
+              env:
+                  GCP_PASSPHRASE: ${{ secrets.GCP_PASSPHRASE }}
+              run : |
+                  mkdir $HOME/secrets
+                  gpg --quiet --batch --yes --decrypt --passphrase="$GCP_PASSPHRASE" \
+                  --output $HOME/secrets/credentials.json ./.github/workflows/credentials.json.gpg
+                  echo ::set-env name=gcp_credentials::$HOME/secrets/credentials.json
+            - name: Test credential file has been correctly decrypted
+              run: |
+                  cat $HOME/secrets/credentials.json
