@@ -8,7 +8,7 @@ import (
 	"regexp"
 
 	"github.com/fatih/color"
-	"github.com/renproject/darknode-cli/provider"
+	"github.com/renproject/darknode-cli/darknode/provider"
 	"github.com/renproject/darknode-cli/util"
 	"github.com/urfave/cli/v2"
 )

@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 
 	"github.com/fatih/color"
-	"github.com/renproject/darknode-cli/provider"
+	"github.com/renproject/darknode-cli/darknode/provider"
 	"github.com/renproject/darknode-cli/util"
 	"github.com/renproject/phi"
 	"github.com/urfave/cli/v2"

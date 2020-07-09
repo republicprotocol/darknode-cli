@@ -1,7 +1,7 @@
 package darknode
 
 import (
-	"github.com/renproject/darknode-cli/provider"
+	"github.com/renproject/darknode-cli/darknode/provider"
 	"github.com/urfave/cli/v2"
 )
 
