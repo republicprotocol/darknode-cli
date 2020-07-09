@@ -1,4 +1,4 @@
-name: install script
+name: installation script
 on: [push]
 jobs:
     bash:
@@ -89,6 +89,3 @@ jobs:
               shell: tcsh {0}
               run: |
                   source ~/.cshrc || command -v darknode
-
-
-

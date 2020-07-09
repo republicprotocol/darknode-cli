@@ -46,7 +46,7 @@ main() {
     ensure chmod +x "$HOME/.darknode/bin/darknode"
     progressBar 90 100
 
-    # Check shell type and set PATH variable.
+    # Try adding the darknode directory to PATH
     add_path
     progressBar 100 100
 
