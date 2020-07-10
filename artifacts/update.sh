@@ -43,6 +43,7 @@ main(){
     ensure chmod +x "$HOME/.darknode/bin/darknode"
 
     progressBar 100 100
+    sleep 1
     echo ''
     echo 'Done! Your darknode-cli has been updated.'
   else

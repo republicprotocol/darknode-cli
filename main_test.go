@@ -296,12 +296,12 @@ var _ = Describe("darknode", func() {
 				})
 
 				It("should stop you from deploying another node with the same name", func() {
-					args := append(argsGCP, arg("name", nodeAWS))
+					args := append(argsGCP, arg("name", nodeGCP))
 					ExpectErr(App(), args, "already exist")
 				})
 
 				It("should be able to destroy the darknode", func() {
-					args := append(os.Args[0:1], CmdDown, "-force", nodeAWS)
+					args := append(os.Args[0:1], CmdDown, "-force", nodeGCP)
 					Expect(App().Run(args)).Should(Succeed())
 				})
 			})
