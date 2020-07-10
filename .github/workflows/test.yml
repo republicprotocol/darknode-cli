@@ -13,6 +13,7 @@ jobs:
               env:
                   GCP_PASSPHRASE: ${{ secrets.GCP_PASSPHRASE }}
               run : |
+                  which terraform
                   mkdir $HOME/secrets
                   gpg --quiet --batch --yes --decrypt --passphrase="$GCP_PASSPHRASE" \
                   --output $HOME/secrets/credentials.json ./.github/workflows/credentials.json.gpg
