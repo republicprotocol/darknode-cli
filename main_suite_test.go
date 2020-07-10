@@ -3,11 +3,13 @@ package main_test
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"runtime"
 	"testing"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/renproject/darknode-cli/util"
 	"github.com/urfave/cli/v2"
 )
 
@@ -68,6 +70,14 @@ var _ = BeforeSuite(func() {
 
 	// Verify the path of GCP credential file has been set up
 	Expect(os.Getenv("gcp_credentials")).ShouldNot(BeEmpty())
+
+	// Verify the existence of the ~/.darknode/darknodes folder
+	path := filepath.Join(os.Getenv("HOME"), ".darknode", "darknodes")
+	_, err := os.Stat(path)
+	Expect(err).NotTo(HaveOccurred())
+
+	// Verify terraform has been installed
+	Expect(util.Run("command", "-v", "terraform")).Should(Succeed())
 })
 
 func TestDarknodeCli(t *testing.T) {
