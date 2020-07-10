@@ -341,7 +341,7 @@ var _ = Describe("darknode", func() {
 							arg("name", nodeGCP),
 							arg("gcp-credentials", cred),
 						)
-						log.Print("random cred = %v", cred)
+						log.Printf("random cred = %v", cred)
 						ExpectErr(App(), args, "no such file or directory")
 						return true
 					}
