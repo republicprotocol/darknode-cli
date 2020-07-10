@@ -119,7 +119,7 @@ func App() *cli.App {
 			Usage: "Resize the instance type of a specific darknode",
 			Flags: []cli.Flag{InstanceFlag, StorageFlag},
 			Action: func(c *cli.Context) error {
-				return expand(c)
+				return resize(c)
 			},
 		},
 		{

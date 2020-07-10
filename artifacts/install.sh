@@ -49,6 +49,7 @@ main() {
     # Try adding the darknode directory to PATH
     add_path
     progressBar 100 100
+    sleep 1
 
     # Output success message
     printf "\n\n"
