@@ -17,10 +17,14 @@ jobs:
                   gpg --quiet --batch --yes --decrypt --passphrase="$GCP_PASSPHRASE" \
                   --output $HOME/secrets/credentials.json ./.github/workflows/credentials.json.gpg
                   echo ::set-env name=gcp_credentials::$HOME/secrets/credentials.json
-            - name: Install terraform for macOS
+            - name: Install terraform
               uses: hashicorp/setup-terraform@v1
               with:
                 terraform_version: 0.12.24
+            - name: Test terraform installation
+              run: |
+                  which terraform
+                  command -v terraform
             - name: Run the integration tests
               env:
                   ACCESS_TOKEN   : ${{ secrets.ACCESS_TOKEN }}
