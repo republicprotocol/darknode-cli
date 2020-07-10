@@ -20,8 +20,8 @@ var _ = Describe("darknode", func() {
 		})
 	})
 
-	PContext("when deploying nodes on AWS", func() {
-		Context("when the given params are valid", func() {
+	Context("when deploying nodes on AWS", func() {
+		PContext("when the given params are valid", func() {
 			Context("when using default values for most of the params", func() {
 				It("should work without any error", func() {
 					args := append(argsAWS, arg("name", nodeAWS))
@@ -154,8 +154,8 @@ var _ = Describe("darknode", func() {
 		})
 	})
 
-	PContext("when deploying nodes on Digital Ocean", func() {
-		Context("when the given params are valid", func() {
+	Context("when deploying nodes on Digital Ocean", func() {
+		PContext("when the given params are valid", func() {
 			Context("when using default values for most of the params", func() {
 				It("should work without any error", func() {
 					args := append(argsDO, arg("name", nodeDO))
@@ -270,7 +270,7 @@ var _ = Describe("darknode", func() {
 	})
 
 	Context("when deploying nodes on GCP", func() {
-		Context("when the given params are valid", func() {
+		PContext("when the given params are valid", func() {
 			Context("when using default values for most of the params", func() {
 				It("should work without any error", func() {
 					args := append(argsGCP, arg("name", nodeAWS))

@@ -21,10 +21,6 @@ jobs:
               uses: hashicorp/setup-terraform@v1
               with:
                 terraform_version: 0.12.24
-            - name: Test terraform installation
-              run: |
-                  which terraform
-                  command -v terraform
             - name: Run the integration tests
               env:
                   ACCESS_TOKEN   : ${{ secrets.ACCESS_TOKEN }}
