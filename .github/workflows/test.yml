@@ -24,5 +24,4 @@ jobs:
                   aws_secret_key : ${{ secrets.AWS_SECRET_ACCESS_KEY}}
                   do_token       : ${{ secrets.DO_TOKEN}}
               run: |
-                  go get -u github.com/onsi/ginkgo/ginkgo
-                  ginkgo -v --race
+                  go test -v --race
