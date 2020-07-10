@@ -77,7 +77,7 @@ var _ = BeforeSuite(func() {
 	Expect(err).NotTo(HaveOccurred())
 
 	// Verify terraform has been installed
-	Expect(util.Run("command", "-v", "terraform")).Should(Succeed())
+	Expect(util.Run("bash", "-c", "command -v terraform")).Should(Succeed())
 })
 
 func TestDarknodeCli(t *testing.T) {
