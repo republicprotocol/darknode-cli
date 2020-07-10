@@ -1,7 +1,6 @@
 package main_test
 
 import (
-	"log"
 	"os"
 	"testing/quick"
 
@@ -22,7 +21,7 @@ var _ = Describe("darknode", func() {
 	})
 
 	Context("when deploying nodes on AWS", func() {
-		PContext("when the given params are valid", func() {
+		Context("when the given params are valid", func() {
 			Context("when using default values for most of the params", func() {
 				It("should work without any error", func() {
 					args := append(argsAWS, arg("name", nodeAWS))
@@ -156,7 +155,7 @@ var _ = Describe("darknode", func() {
 	})
 
 	Context("when deploying nodes on Digital Ocean", func() {
-		PContext("when the given params are valid", func() {
+		Context("when the given params are valid", func() {
 			Context("when using default values for most of the params", func() {
 				It("should work without any error", func() {
 					args := append(argsDO, arg("name", nodeDO))
@@ -271,7 +270,7 @@ var _ = Describe("darknode", func() {
 	})
 
 	Context("when deploying nodes on GCP", func() {
-		PContext("when the given params are valid", func() {
+		Context("when the given params are valid", func() {
 			Context("when using default values for most of the params", func() {
 				It("should work without any error", func() {
 					args := append(argsGCP, arg("name", nodeAWS))
@@ -341,7 +340,6 @@ var _ = Describe("darknode", func() {
 							arg("name", nodeGCP),
 							arg("gcp-credentials", cred),
 						)
-						log.Printf("random cred = %v", cred)
 						ExpectErr(App(), args, "no such file or directory")
 						return true
 					}

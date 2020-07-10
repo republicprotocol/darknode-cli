@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -45,11 +44,9 @@ type terraformGCP struct {
 func NewGCP(ctx *cli.Context) (Provider, error) {
 	credFile, err := filepath.Abs(ctx.String("gcp-credentials"))
 	if err != nil {
-		log.Print("err here 1", err)
 		return nil, err
 	}
 	if _, err := os.Stat(credFile); err != nil {
-		log.Print("err here 2", err)
 		return nil, err
 	}
 	// Verify the user has required permission for deploying a darknode
