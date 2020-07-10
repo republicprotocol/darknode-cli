@@ -273,7 +273,7 @@ var _ = Describe("darknode", func() {
 		Context("when the given params are valid", func() {
 			Context("when using default values for most of the params", func() {
 				It("should work without any error", func() {
-					args := append(argsGCP, arg("name", nodeAWS))
+					args := append(argsGCP, arg("name", nodeGCP))
 					Expect(App().Run(args)).Should(Succeed())
 				})
 
