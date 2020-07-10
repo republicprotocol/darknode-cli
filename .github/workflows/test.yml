@@ -30,4 +30,4 @@ jobs:
                   do_token       : ${{ secrets.DO_TOKEN}}
               run: |
                   mkdir -p $HOME/.darknode/darknodes
-                  go test -v --race
+                  go test -v --race -timeout 30m

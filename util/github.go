@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"os"
+	"path"
 	"regexp"
 	"time"
 
@@ -41,6 +42,15 @@ func CurrentReleaseVersion(ctx context.Context) (*version.Version, error) {
 		return nil, err
 	}
 	return version.NewVersion(release.GetTagName())
+}
+
+func CliLatestVersion()(*version.Version, error) {
+	resp, err := http.Get("https://www.github.com/renproject/darknode-cli/releases/latest")
+	if err != nil {
+		return nil, err
+	}
+
+	return version.NewVersion(path.Base(resp.Request.URL.String()))
 }
 
 // LatestStableRelease checks the node release repo and return the version of the latest release.

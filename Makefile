@@ -9,7 +9,7 @@ LDFLAGS = -s -w -X main.binaryVersion=${FULL_VERSION}
 all: local
 
 local: clean
-	$(call build_local,./cmd)
+	$(call build_local,.)
 
 version:
 	@ echo ${FULL_VERSION}
