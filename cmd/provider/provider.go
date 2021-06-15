@@ -79,6 +79,9 @@ func GetProvider(name string) (string, error) {
 
 	cmd := fmt.Sprintf("cd %v && terraform output provider", util.NodePath(name))
 	provider, err := util.CommandOutput(cmd)
+	if strings.HasPrefix(provider, "\""){
+		provider = 	strings.Trim(provider, "\"")
+	}
 	return strings.TrimSpace(provider), err
 }
 
